@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acerca de</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+<header class="bg-blue-800 p-4 shadow-lg flex items-center space-x-4 relative">
+    <img src="/imagenes/logo.jpg" alt="Logo Virtual Academy" class="w-14 h-14">
+
+    <h1 class="text-2xl font-bold">Virtual Academy - Acerca de</h1>
+
+    <div class="absolute right-6 top-1/2 transform -translate-y-1/2 flex items-center space-x-4">
+        <span class="text-lg">
+            <span class="font-bold" sec:authentication="name"></span>
+        </span>
+
+        <a href="/logout"
+           class="px-5 py-2 bg-red-600 rounded-md text-lg font-semibold hover:bg-red-700 transition shadow-md">
+            Cerrar sesión
+        </a>
+    </div>
+</header>
+
+<main class="p-6 flex flex-col items-center mt-10 mb-10">
+
+    <div class="bg-blue-900 p-6 rounded-lg shadow-lg w-full max-w-2xl">
+
+        <h2 class="text-3xl font-bold mb-6 text-center">Acerca de Virtual Academy</h2>
+
+        <p class="text-base leading-relaxed mb-6 text-justify">
+            Virtual Academy es una plataforma desarrollada con el objetivo de facilitar la gestión
+            académica de estudiantes, asignaturas, calificaciones y usuarios dentro del entorno educativo.
+            Su diseño intuitivo permite a estudiantes, profesores y personal de administración acceder fácilmente
+            a la información y herramientas necesarias para el desempeño de sus funciones.
+        </p>
+
+        <ul class="space-y-2 text-base">
+
+            <li class="flex items-start space-x-2">
+                <span class="text-blue-300 text-lg">•</span>
+                <p><strong>Autor:</strong> Fernando Romero Alhama</p>
+            </li>
+
+            <li class="flex items-start space-x-2">
+                <span class="text-blue-300 text-lg">•</span>
+                <p><strong>Instituto:</strong> IES Trassierra</p>
+            </li>
+
+            <li class="flex items-start space-x-2">
+                <span class="text-blue-300 text-lg">•</span>
+                <p><strong>Localidad:</strong> Córdoba</p>
+            </li>
+
+            <li class="flex items-start space-x-2">
+                <span class="text-blue-300 text-lg">•</span>
+                <p><strong>Código postal:</strong> 14011</p>
+            </li>
+
+            <li class="flex items-start space-x-2">
+                <span class="text-blue-300 text-lg">•</span>
+                <p><strong>Dirección:</strong> Av. Arroyo del Moro, s/n</p>
+            </li>
+
+            <li class="flex items-start space-x-2">
+                <span class="text-blue-300 text-lg">•</span>
+                <p><strong>Teléfono:</strong> 957 73 49 00</p>
+            </li>
+
+            <li class="flex items-start space-x-2">
+                <span class="text-blue-300 text-lg">•</span>
+                <p>
+                    <strong>Web:</strong>
+                    <a href="https://iestrassierra.com" target="_blank"
+                       class="text-blue-300 hover:text-blue-400 underline">
+                        https://iestrassierra.com
+                    </a>
+                </p>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <div class="w-full flex justify-center mt-10 mb-6">
+        <a href="javascript:history.back()"
+           class="px-6 py-3 bg-blue-600 rounded-md text-lg font-semibold hover:bg-blue-700 transition shadow-md">
+            Volver
+        </a>
+    </div>
+
+</main>
+
+<footer class="bg-blue-800 p-4 text-center text-sm mt-auto">
+    © Virtual Academy - 2025
+</footer>
+
+</body>
+</html>

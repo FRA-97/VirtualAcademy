@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relaciones por Asignatura</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0f172a] text-[#e2e8f0] min-h-screen flex flex-col">
+
+<header class="bg-blue-800 p-4 shadow-lg flex items-center relative">
+    <h1 class="text-2xl font-bold">Relaciones de Asignatura</h1>
+
+    <div class="absolute right-6 top-1/2 transform -translate-y-1/2 flex items-center space-x-6">
+
+        <span class="text-lg">
+            <span class="font-bold" sec:authentication="name"></span>
+        </span>
+
+        <a href="/logout"
+           class="px-5 py-2 bg-red-600 rounded-md text-lg font-semibold hover:bg-red-700 transition shadow-md">
+            Cerrar sesión
+        </a>
+
+    </div>
+</header>
+
+<main class="flex-1 p-6">
+    <div th:if="${mensaje}" class="text-yellow-300 font-bold mb-4" th:text="${mensaje}"></div>
+
+    <div th:if="${!#lists.isEmpty(relaciones)}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div th:each="relacion : ${relaciones}" class="bg-blue-900 p-6 rounded-lg shadow-lg hover:shadow-2xl transition">
+            <p><strong>Usuario:</strong> <span th:text="${relacion.usuario.nombre + ' ' + relacion.usuario.apellidos}"></span></p>
+            <p><strong>Curso:</strong> <span th:text="${relacion.curso}"></span></p>
+            <p><strong>Grupo:</strong> <span th:text="${relacion.grupo}"></span></p>
+            <p><strong>Calificación:</strong> <span th:text="${relacion.calificacion}"></span></p>
+            <p><strong>Fecha asistencia:</strong> <span th:text="${relacion.fechaAsistencia}"></span></p>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a th:href="@{/usuario-asignatura/asignaturas}" class="px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-700 transition">Volver al listado de asignaturas</a>
+    </div>
+</main>
+
+<footer class="bg-blue-800 p-4 text-center text-sm text-blue-200 shadow-inner">
+    &copy; 2025 Virtual Academy
+</footer>
+</body>
+</html>

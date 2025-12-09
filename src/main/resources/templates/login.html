@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar Sesión - Virtual Academy</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        .login-bg {
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+        }
+    </style>
+</head>
+
+<body class="login-bg min-h-screen flex flex-col justify-center items-center text-slate-100">
+
+<div class="absolute top-10 flex flex-col items-center z-50">
+    <img src="/imagenes/logo.jpg"
+         alt="Logo Virtual Academy"
+         class="w-56 h-56 object-contain mb-2 rounded-xl shadow-2xl border border-blue-300/40">
+</div>
+
+<div class="bg-blue-900 bg-opacity-60 backdrop-blur-lg p-8 rounded-xl shadow-2xl w-96 border border-blue-700 mt-32">
+
+    <h2 class="text-2xl font-semibold text-center mb-6 text-blue-100">Iniciar sesión</h2>
+
+    <input type="email"
+           id="email"
+           placeholder="Correo electrónico"
+           class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
+    >
+
+    <input type="password"
+           id="password"
+           placeholder="Contraseña"
+           class="w-full p-3 rounded-md text-black mt-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
+    >
+
+    <button onclick="login()"
+            class="w-full mt-6 p-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow-md transition">
+        Entrar
+    </button>
+
+    <div id="errorMessage" class="text-red-400 text-sm mt-4 text-center"></div>
+</div>
+
+<footer class="text-blue-200 text-sm mt-10">
+    © 2025 Virtual Academy
+</footer>
+
+<script>
+    function login() {
+        //Envío de credenciales al filtro JwtAuthenticationFilter
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        fetch("/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email, password: password })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw new Error(err.message || "Error en el login");
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                //Guarda token JWT para futuras peticiones autenticadas
+                localStorage.setItem("token", data.token);
+                //Guarda el rol para redirigir correctamente
+                localStorage.setItem("role", data.role);
+
+                //Redirección basada en los roles enviados por el backend
+                if (data.role === "ROLE_SECRETARIO") window.location.href = "/usuarios";
+                else if (data.role === "ROLE_PROFESOR") window.location.href = "/usuario-asignatura";
+                else if (data.role === "ROLE_ESTUDIANTE") window.location.href = "/informacion/estudiantes";
+            })
+            .catch(error => {
+                //Muestra mensaje de error proveniente del backend
+                document.getElementById("errorMessage").innerText = error.message;
+            });
+    }
+</script>
+
+</body>
+</html>

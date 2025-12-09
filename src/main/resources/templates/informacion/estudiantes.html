@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información del estudiante</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+<header class="bg-blue-800 p-4 shadow-lg flex items-center space-x-4 relative">
+    <img src="/imagenes/logo.jpg" alt="Logo Virtual Academy" class="w-14 h-14">
+    <h1 class="text-2xl font-bold">Virtual Academy - Información del estudiante</h1>
+
+    <div class="absolute right-6 top-1/2 transform -translate-y-1/2 flex items-center space-x-6">
+        <span class="text-lg">
+            <span class="font-bold" sec:authentication="name"></span>
+        </span>
+
+        <a href="/logout"
+           class="px-5 py-2 bg-red-600 rounded-md text-lg font-semibold hover:bg-red-700 transition shadow-md">
+            Cerrar sesión
+        </a>
+    </div>
+</header>
+
+<nav class="bg-blue-900 p-4 flex space-x-4">
+    <a th:href="@{/informacion/estudiantes}" class="hover:text-blue-300 transition">Información</a>
+    <a th:href="@{/ayuda}" class="hover:text-blue-300 transition">Ayuda</a>
+    <a th:href="@{/acerca}" class="hover:text-blue-300 transition">Acerca de</a>
+</nav>
+
+<main class="p-6 flex justify-center mt-10 mb-10">
+
+    <div class="bg-blue-900 p-4 rounded-lg shadow-lg w-full max-w-sm">
+
+        <h3 class="text-lg font-semibold mb-2"
+            th:text="|${estudiante.nombre} ${estudiante.apellidos}|"></h3>
+
+        <p class="text-sm"><strong>Email:</strong> <span th:text="${estudiante.email}"></span></p>
+        <p class="text-sm"><strong>DNI:</strong> <span th:text="${estudiante.dni}"></span></p>
+        <p class="text-sm"><strong>Teléfono:</strong> <span th:text="${estudiante.telefono}"></span></p>
+
+        <div class="mt-3">
+            <strong class="text-sm">Asignaturas y calificaciones</strong>
+
+            <div th:if="${#sets.isEmpty(estudiante.usuarioAsignaturas)}" class="text-sm mt-1">
+                No tiene asignaturas asignadas
+            </div>
+
+            <ul th:unless="${#sets.isEmpty(estudiante.usuarioAsignaturas)}"
+                class="list-disc ml-5 mt-2 space-y-1 text-sm">
+
+                <li th:each="ua : ${estudiante.usuarioAsignaturas}">
+                    <span th:text="${ua.asignatura.nombre}"></span> :
+                    <span th:text="${ua.calificacion != null ? ua.calificacion : 'Sin calificar'}"></span>
+                </li>
+
+            </ul>
+        </div>
+
+        <div class="mt-4 flex justify-center">
+            <a th:href="@{'/informacion/estudiantes/' + ${estudiante.idUsuario} + '/pdf'}"
+               class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm">
+                Generar PDF
+            </a>
+        </div>
+
+    </div>
+
+</main>
+
+<footer class="bg-blue-800 p-4 text-center text-sm mt-auto">
+    © Virtual Academy - 2025
+</footer>
+
+</body>
+</html>

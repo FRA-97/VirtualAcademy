@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayuda - Virtual Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+<header class="bg-blue-800 p-4 shadow-lg flex items-center space-x-4 relative">
+    <img src="/imagenes/logo.jpg" alt="Logo Virtual Academy" class="w-14 h-14">
+    <h1 class="text-2xl font-bold">Virtual Academy - Ayuda</h1>
+
+    <div class="absolute right-6 top-1/2 transform -translate-y-1/2 flex items-center space-x-4">
+        <span class="text-lg">
+            <span class="font-bold" sec:authentication="name"></span>
+        </span>
+
+        <a href="/logout"
+           class="px-5 py-2 bg-red-600 rounded-md text-lg font-semibold hover:bg-red-700 transition shadow-md">
+            Cerrar sesión
+        </a>
+    </div>
+</header>
+
+<main class="flex-1 p-6 max-w-6xl mx-auto space-y-6">
+
+    <!-- Introducción -->
+    <section class="bg-blue-900 p-5 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold mb-2">Centro de ayuda</h2>
+        <p class="text-sm">
+            En esta sección encontrarás información básica para utilizar Virtual Academy,
+            tanto si eres estudiante como si formas parte del personal.
+        </p>
+    </section>
+
+    <!-- Guía para estudiantes -->
+    <section class="bg-blue-900 p-5 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold mb-2">Guía rápida para estudiantes</h2>
+        <ul class="list-disc ml-6 space-y-1 text-sm">
+            <li>Inicia sesión con tus credenciales asignadas.</li>
+            <li>Accede a Información del estudiante para ver tus asignaturas y calificaciones.</li>
+            <li>Descarga tu informe académico en PDF si lo necesitas.</li>
+        </ul>
+    </section>
+
+    <!-- Guía personal administrativo + profesores siempre visible -->
+    <section class="grid gap-4 md:grid-cols-2">
+
+        <!-- Secretaría -->
+        <div class="bg-blue-900 p-5 rounded-lg shadow-lg">
+            <h2 class="text-xl font-bold mb-2">Guía rápida para secretaría</h2>
+            <ul class="list-disc ml-6 space-y-1 text-sm">
+                <li>Gestiona usuarios y sus roles.</li>
+                <li>Administra asignaturas.</li>
+                <li>Asigna estudiantes a materias y calificaciones.</li>
+            </ul>
+        </div>
+
+        <!-- Profesores (visible para todos los roles) -->
+        <div class="bg-blue-900 p-5 rounded-lg shadow-lg">
+            <h2 class="text-xl font-bold mb-2">Guía rápida para profesorado</h2>
+            <ul class="list-disc ml-6 space-y-1 text-sm">
+                <li>Consulta la lista de alumnos y sus asignaturas.</li>
+                <li>Actualiza calificaciones cuando lo requiera el curso.</li>
+                <li>Revisa que la información del alumno sea correcta.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <!-- FAQ -->
+    <section class="bg-blue-900 p-5 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold mb-3">Preguntas frecuentes</h2>
+
+        <div class="space-y-4 text-sm">
+
+            <div class="flex items-start space-x-2">
+                <span class="text-blue-300 text-lg">•</span>
+                <div>
+                    <p class="font-semibold">No puedo iniciar sesión</p>
+                    <p>Contacta con secretaría para restablecer tu contraseña.</p>
+                </div>
+            </div>
+
+            <div class="flex items-start space-x-2">
+                <span class="text-blue-300 text-lg">•</span>
+                <div>
+                    <p class="font-semibold">Mis datos no son correctos</p>
+                    <p>Reporta el error a secretaría para corregirlos.</p>
+                </div>
+            </div>
+
+            <div class="flex items-start space-x-2">
+                <span class="text-blue-300 text-lg">•</span>
+                <div>
+                    <p class="font-semibold">No veo mis asignaturas</p>
+                    <p>Puede que aún no hayan sido asignadas. Contacta con tu profesor o secretaría.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Soporte -->
+    <section class="bg-blue-900 p-5 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold mb-2">Soporte y contacto</h2>
+        <p class="text-sm mb-2">Puedes ponerte en contacto con el equipo de soporte:</p>
+
+        <ul class="list-disc ml-6 text-sm space-y-1">
+            <li>Correo: <strong>soporte@virtualacademy.com</strong></li>
+            <li>Horario: <strong>Lunes a viernes, de 9:00 a 14:00</strong></li>
+        </ul>
+    </section>
+
+    <!-- Botón Volver abajo centrado -->
+    <div class="w-full flex justify-center mt-10 mb-6">
+        <a href="javascript:history.back()"
+           class="px-6 py-3 bg-blue-600 rounded-md text-lg font-semibold hover:bg-blue-700 transition shadow-md">
+            Volver
+        </a>
+    </div>
+
+</main>
+
+<footer class="bg-blue-800 p-4 text-center text-sm mt-auto">
+    © Virtual Academy - 2025
+</footer>
+
+</body>
+</html>

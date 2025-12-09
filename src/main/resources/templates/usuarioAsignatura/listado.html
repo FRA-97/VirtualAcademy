@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos usuario-asignatura</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0f172a] text-[#e2e8f0] min-h-screen flex flex-col">
+
+<header class="bg-blue-800 p-4 shadow-lg flex items-center space-x-4 relative">
+    <img src="/imagenes/logo.jpg" alt="Logo Virtual Academy" class="w-14 h-14">
+    <h1 class="text-2xl font-bold">Virtual Academy - Datos</h1>
+
+    <div class="absolute right-6 top-1/2 transform -translate-y-1/2 flex items-center space-x-6">
+        <span class="text-lg">
+            <span class="font-bold" sec:authentication="name"></span>
+        </span>
+
+        <a href="/logout"
+           class="px-5 py-2 bg-red-600 rounded-md text-lg font-semibold hover:bg-red-700 transition shadow-md">
+            Cerrar sesión
+        </a>
+    </div>
+</header>
+
+<nav class="bg-blue-900 p-4 flex space-x-4">
+
+    <!-- Mostrar solo a SECRETARIO y ADMIN -->
+    <a th:href="@{/usuarios}"
+       class="hover:text-blue-300 transition"
+       sec:authorize="!hasRole('PROFESOR')">
+        Usuarios
+    </a>
+
+    <a th:href="@{/roles}"
+       class="hover:text-blue-300 transition"
+       sec:authorize="!hasRole('PROFESOR')">
+        Roles
+    </a>
+
+    <a th:href="@{/asignaturas}"
+       class="hover:text-blue-300 transition"
+       sec:authorize="!hasRole('PROFESOR')">
+        Asignaturas
+    </a>
+
+    <a th:href="@{/usuario-asignatura}"
+       class="hover:text-blue-300 transition">
+        Datos
+    </a>
+
+    <a th:href="@{/ayuda}" class="hover:text-blue-300 transition">Ayuda</a>
+    <a th:href="@{/acerca}" class="hover:text-blue-300 transition">Acerca de</a>
+</nav>
+
+<main class="flex-1 p-6">
+    <div class="flex justify-between items-center mb-4 space-x-2">
+        <h2 class="text-2xl font-bold">Listado de datos</h2>
+
+        <div class="flex space-x-2">
+            <!-- SOLO SECRETARIO -->
+            <a th:href="@{/usuario-asignatura/nuevo}"
+               class="px-4 py-2 bg-blue-600 rounded-md font-semibold hover:bg-blue-700 transition"
+               sec:authorize="hasRole('SECRETARIO')">
+                Añadir datos
+            </a>
+
+            <!-- FILTROS (visibles para todos) -->
+            <a href="/usuario-asignatura/filtrar"
+               class="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-md font-semibold transition">
+                Filtrar por usuario
+            </a>
+            <a href="/usuario-asignatura/filtrar/asignatura"
+               class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md font-semibold transition">
+                Filtrar por asignatura
+            </a>
+            <a href="/usuario-asignatura/filtrar-curso"
+               class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md font-semibold transition">
+                Filtrar por curso
+            </a>
+            <a href="/usuario-asignatura/filtrar-grupo"
+               class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md font-semibold transition">
+                Filtrar por grupo
+            </a>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(relaciones)}"
+         class="bg-blue-900 p-6 rounded-lg shadow-lg text-center text-lg font-semibold">
+        No hay relaciones entre usuarios y asignaturas registradas
+    </div>
+
+    <div th:if="${!relaciones.isEmpty()}"
+         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <div th:each="relacion : ${relaciones}"
+             class="bg-blue-900 p-6 rounded-lg shadow-lg hover:shadow-2xl transition">
+
+            <p><strong>Usuario:</strong>
+                <span th:text="${relacion.usuario.nombre + ' ' + relacion.usuario.apellidos}"></span>
+            </p>
+            <p><strong>Asignatura:</strong>
+                <span th:text="${relacion.asignatura.nombre}"></span>
+            </p>
+            <p><strong>Curso:</strong>
+                <span th:text="${relacion.curso}"></span>
+            </p>
+            <p><strong>Grupo:</strong>
+                <span th:text="${relacion.grupo}"></span>
+            </p>
+            <p><strong>Calificación:</strong>
+                <span th:text="${relacion.calificacion}"></span>
+            </p>
+            <p><strong>Fecha asistencia:</strong>
+                <span th:text="${relacion.fechaAsistencia}"></span>
+            </p>
+
+            <div class="mt-4 flex space-x-2">
+
+                <!-- EDITAR → SECRETARIO siempre -->
+                <a sec:authorize="hasRole('SECRETARIO')"
+                   th:href="@{'/usuario-asignatura/editar/' + ${relacion.id}}"
+                   class="px-3 py-1 bg-blue-500 rounded-md hover:bg-blue-600 transition">
+                    Editar
+                </a>
+
+                <!-- EDITAR → PROFESOR solo si el usuario es ESTUDIANTE -->
+                <a sec:authorize="hasRole('PROFESOR')"
+                   th:if="${relacion.usuario.rol.cargo.name() == 'ESTUDIANTE'}"
+                   th:href="@{'/usuario-asignatura/editar/' + ${relacion.id}}"
+                   class="px-3 py-1 bg-blue-500 rounded-md hover:bg-blue-600 transition">
+                    Editar
+                </a>
+
+                <!-- ELIMINAR → SOLO SECRETARIO -->
+                <a sec:authorize="hasRole('SECRETARIO')"
+                   th:href="@{'/usuario-asignatura/eliminar/' + ${relacion.id}}"
+                   class="px-3 py-1 bg-red-600 rounded-md hover:bg-red-700 transition">
+                    Eliminar
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="bg-blue-800 p-4 text-center text-sm text-blue-200 shadow-inner">
+    &copy; Virtual Academy - 2025
+</footer>
+
+</body>
+</html>

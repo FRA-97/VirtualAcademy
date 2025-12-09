@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario datos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#0f172a] text-[#e2e8f0] min-h-screen flex flex-col">
+
+<header class="bg-blue-800 p-4 shadow-lg flex items-center space-x-4 relative">
+    <img src="/imagenes/logo.jpg" alt="Logo Virtual Academy" class="w-14 h-14">
+    <h1 class="text-2xl font-bold">Virtual Academy - Formulario datos</h1>
+
+    <div class="absolute right-6 top-1/2 transform -translate-y-1/2 flex items-center space-x-6">
+        <span class="text-lg">
+            <span class="font-bold" sec:authentication="name"></span>
+        </span>
+
+        <a href="/logout"
+           class="px-5 py-2 bg-red-600 rounded-md text-lg font-semibold hover:bg-red-700 transition shadow-md">
+            Cerrar sesión
+        </a>
+    </div>
+</header>
+
+<nav class="bg-blue-900 p-4 flex space-x-4">
+
+    <!-- Ocultar si el usuario es PROFESOR -->
+    <a th:href="@{/usuarios}"
+       class="hover:text-blue-300 transition"
+       sec:authorize="!hasRole('PROFESOR')">
+        Usuarios
+    </a>
+
+    <a th:href="@{/roles}"
+       class="hover:text-blue-300 transition"
+       sec:authorize="!hasRole('PROFESOR')">
+        Roles
+    </a>
+
+    <a th:href="@{/asignaturas}"
+       class="hover:text-blue-300 transition"
+       sec:authorize="!hasRole('PROFESOR')">
+        Asignaturas
+    </a>
+
+    <a th:href="@{/usuario-asignatura}"
+       class="hover:text-blue-300 transition">
+        Datos
+    </a>
+
+    <a th:href="@{/ayuda}" class="hover:text-blue-300 transition">Ayuda</a>
+    <a th:href="@{/acerca}" class="hover:text-blue-300 transition">Acerca de</a>
+
+</nav>
+
+<main class="flex-1 p-6 flex justify-center">
+    <div class="flex flex-col items-center w-full max-w-md space-y-4">
+
+        <div th:if="${mensaje}" class="text-yellow-300 font-semibold text-center w-full" th:text="${mensaje}"></div>
+
+        <form th:action="${usuarioAsignatura.id} == null ? @{/usuario-asignatura} : @{/usuario-asignatura/actualizar/{id}(id=${usuarioAsignatura.id})}"
+              th:object="${usuarioAsignatura}"
+              method="post"
+              class="bg-blue-900 p-8 rounded-lg shadow-lg w-full max-w-md space-y-6">
+
+            <h2 class="text-xl font-bold mb-4"
+                th:text="${usuarioAsignatura.id} == null ? 'Nueva Relación' : 'Editar Relación'">
+            </h2>
+
+            <div>
+                <label class="block font-semibold mb-1">Usuario</label>
+                <select th:field="*{usuario.idUsuario}" class="w-full p-2 rounded-md text-black" required>
+                    <option value="" disabled selected>Seleccione un usuario</option>
+                    <option th:each="u : ${usuarios}"
+                            th:if="${u.rol != null and u.rol.cargo != T(com.fra.VirtualAcademy.modelos.Enumeracion$Cargo).SECRETARIO}"
+                            th:value="${u.idUsuario}"
+                            th:text="${u.nombre + ' ' + u.apellidos}"
+                            th:attr="data-cargo=${u.rol != null ? u.rol.cargo : ''}">
+                    </option>
+                </select>
+                <p class="text-red-400 text-sm mt-1"
+                   th:if="${#fields.hasErrors('usuario.idUsuario')}"
+                   th:errors="*{usuario.idUsuario}"></p>
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Asignatura</label>
+                <select th:field="*{asignatura.idAsignatura}" class="w-full p-2 rounded-md text-black" required>
+                    <option value="" disabled selected>Seleccione una asignatura</option>
+                    <option th:each="a : ${asignaturas}" th:value="${a.idAsignatura}" th:text="${a.nombre}"></option>
+                </select>
+                <p class="text-red-400 text-sm mt-1"
+                   th:if="${#fields.hasErrors('asignatura.idAsignatura')}"
+                   th:errors="*{asignatura.idAsignatura}"></p>
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Curso</label>
+                <input type="text" th:field="*{curso}" class="w-full p-2 rounded-md text-black" required>
+                <p class="text-red-400 text-sm mt-1" th:if="${#fields.hasErrors('curso')}" th:errors="*{curso}"></p>
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Grupo</label>
+                <input type="text" th:field="*{grupo}" class="w-full p-2 rounded-md text-black" required>
+                <p class="text-red-400 text-sm mt-1" th:if="${#fields.hasErrors('grupo')}" th:errors="*{grupo}"></p>
+            </div>
+
+            <div id="divCalificacion">
+                <label class="block font-semibold mb-1">Calificación</label>
+                <input type="number" step="0.1" min="0" max="10" th:field="*{calificacion}" class="w-full p-2 rounded-md text-black">
+                <p class="text-red-400 text-sm mt-1" th:if="${#fields.hasErrors('calificacion')}" th:errors="*{calificacion}"></p>
+            </div>
+
+            <div id="divFechaAsistencia">
+                <label class="block font-semibold mb-1">Fecha de Asistencia</label>
+                <input type="date" id="fechaAsistencia" th:field="*{fechaAsistencia}" class="w-full p-2 rounded-md text-black">
+                <p id="errorFecha" class="text-red-400 text-sm mt-1 hidden">La fecha no puede ser superior al día actual.</p>
+                <p class="text-red-400 text-sm mt-1" th:if="${#fields.hasErrors('fechaAsistencia')}" th:errors="*{fechaAsistencia}"></p>
+            </div>
+
+            <div class="flex space-x-2">
+                <button type="submit"
+                        class="px-4 py-2 bg-blue-600 rounded-md font-semibold hover:bg-blue-700 transition">
+                    Guardar
+                </button>
+
+                <a th:href="@{/usuario-asignatura}"
+                   class="px-4 py-2 bg-gray-600 rounded-md font-semibold hover:bg-gray-700 transition text-center">
+                    Volver
+                </a>
+            </div>
+
+        </form>
+</main>
+
+<footer class="bg-blue-800 p-4 text-center text-sm text-blue-200 shadow-inner">
+    &copy; Virtual Academy - 2025
+</footer>
+
+<script>
+    //Cambia visibilidad de campos según rol del usuario seleccionado
+    const selectUsuario = document.querySelector("select[name='usuario.idUsuario']");
+    const divCalificacion = document.getElementById("divCalificacion");
+    const divFechaAsistencia = document.getElementById("divFechaAsistencia");
+    const inputCalificacion = divCalificacion.querySelector("input");
+    const inputFecha = divFechaAsistencia.querySelector("input");
+
+    function actualizarCampos() {
+        const selectedOption = selectUsuario.options[selectUsuario.selectedIndex];
+        const cargo = selectedOption?.dataset?.cargo;
+
+        if (!cargo) return;
+
+        if (cargo === 'PROFESOR') {
+            divCalificacion.style.display = 'none';
+            divFechaAsistencia.style.display = 'none';
+            inputCalificacion.value = '';
+            inputFecha.value = '';
+            inputCalificacion.removeAttribute('required');
+            inputFecha.removeAttribute('required');
+        } else {
+            divCalificacion.style.display = 'block';
+            divFechaAsistencia.style.display = 'block';
+            inputCalificacion.setAttribute('required', 'required');
+            inputFecha.setAttribute('required', 'required');
+        }
+    }
+
+    selectUsuario.addEventListener('change', actualizarCampos);
+    window.addEventListener('load', actualizarCampos);
+
+    //Validación de fecha (no puede ser una fecha futura)
+    const inputFechaAsistencia = document.getElementById("fechaAsistencia");
+    const mensajeErrorFecha = document.getElementById("errorFecha");
+    const hoy = new Date().toISOString().split("T")[0];
+
+    //Evita seleccionar fechas posteriores al día actual
+    inputFechaAsistencia.setAttribute("max", hoy);
+
+    inputFechaAsistencia.addEventListener("change", () => {
+        if (inputFechaAsistencia.value > hoy) {
+            mensajeErrorFecha.classList.remove("hidden");
+            inputFechaAsistencia.value = "";
+        } else {
+            mensajeErrorFecha.classList.add("hidden");
+        }
+    });
+</script>
+
+</body>
+</html>

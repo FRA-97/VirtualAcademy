@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles asignatura</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0f172a] text-[#e2e8f0] min-h-screen flex flex-col">
+
+<header class="bg-blue-800 p-4 shadow-lg flex items-center space-x-4 relative">
+    <img src="/imagenes/logo.jpg" alt="Logo Virtual Academy" class="w-14 h-14">
+    <h1 class="text-2xl font-bold">Virtual Academy - Información asignatura</h1>
+
+    <div class="absolute right-6 top-1/2 transform -translate-y-1/2 flex items-center space-x-6">
+        <span class="text-lg">
+            <span class="font-bold" sec:authentication="name"></span>
+        </span>
+
+        <a href="/logout"
+           class="px-5 py-2 bg-red-600 rounded-md text-lg font-semibold hover:bg-red-700 transition shadow-md">
+            Cerrar sesión
+        </a>
+    </div>
+</header>
+
+<nav class="bg-blue-900 p-4 flex space-x-4">
+    <a th:href="@{/usuarios}" class="hover:text-blue-300 transition">Usuarios</a>
+    <a th:href="@{/roles}" class="hover:text-blue-300 transition">Roles</a>
+    <a th:href="@{/asignaturas}" class="hover:text-blue-300 transition">Asignaturas</a>
+    <a th:href="@{/templates/usuarioAsignatura}" class="hover:text-blue-300 transition">Datos</a>
+    <a th:href="@{/ayuda}" class="hover:text-blue-300 transition">Ayuda</a>
+    <a th:href="@{/acerca}" class="hover:text-blue-300 transition">Acerca de</a>
+</nav>
+
+<main class="flex-1 p-6 flex justify-center">
+    <div class="bg-blue-900 p-8 rounded-lg shadow-lg w-full max-w-md space-y-4">
+        <h2 class="text-xl font-bold mb-4" th:text="${asignatura.nombre}"></h2>
+        <p><strong>Descripción:</strong> <span th:text="${asignatura.descripcion}"></span></p>
+        <p><strong>Horario:</strong> <span th:text="${asignatura.horario}"></span></p>
+
+        <div class="mt-4 flex space-x-2">
+            <a th:href="@{'/asignaturas/editar/' + ${asignatura.idAsignatura}}" class="px-3 py-1 bg-blue-500 rounded-md hover:bg-blue-600 transition">Editar</a>
+            <a th:href="@{/asignaturas}" class="px-3 py-1 bg-gray-700 rounded-md hover:bg-gray-600 transition">Volver</a>
+        </div>
+    </div>
+</main>
+
+<footer class="bg-blue-800 p-4 text-center text-sm text-blue-200 shadow-inner">
+    &copy; Virtual Academy - 2025
+</footer>
+</body>
+</html>
